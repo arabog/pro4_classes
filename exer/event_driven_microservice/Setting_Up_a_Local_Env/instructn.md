@@ -2,6 +2,9 @@ Note: You will need the virtualenv package installed to use venv. On a Mac, you 
 
 Below are the steps again to refresh your memory! In the steps below, venv is the name of the environment created, but you can name the environment anything you want.
 
+mk a dir and cd into it:
+mkdir local_env
+
 Create a Python3 virtual environment: 
 python3 -m venv venv
 
@@ -27,7 +30,11 @@ pip install pytest
 Install the interactive interpreter ipython: 
 pip install ipython
 
-Test it out by typing ipython and running some code
+Test it out by typing ipython and running some code:
+
+ipython
+import os
+os.listdir(".")
 
 Setting up the environment!
 Complete the steps below to set up your environment.
