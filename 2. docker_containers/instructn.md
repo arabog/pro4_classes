@@ -179,3 +179,172 @@ nano cli.py
 to run test:
 make test
 
+
+-: Install Docker
+Note: You will need to open Docker from your Applications for the first time for it to appear in the menu bar. Kubernetes may not yet be running for you, but we will come back to it later.
+
+A few useful links for your reference:
+Docker Homepage
+https://www.docker.com/
+
+Play with Docker Classroom
+https://training.play-with-docker.com/
+
+Docker Orientation and Setup
+https://docs.docker.com/get-started/
+
+
+-: Linting and CircleCI
+Extending a Makefile for use with Docker Containers
+Beyond the simple Makefile, it is also useful to extend it to do other things. An example of this is as follows:
+
+Example Makefile for Docker and CircleCI
+setup:
+    python3 -m venv ~/.container-revolution-devops
+
+install:
+    pip install --upgrade pip &&\
+        pip install -r requirements.txt
+
+test:
+    #python -m pytest -vv --cov=myrepolib tests/*.py
+    #python -m pytest --nbval notebook.ipynb
+
+validate-circleci:
+    # See https://circleci.com/docs/2.0/local-cli/#processing-a-config
+    circleci config process .circleci/config.yml
+
+run-circleci-local:
+    # See https://circleci.com/docs/2.0/local-cli/#running-a-job
+    circleci local execute
+
+lint:
+    hadolint demos/flask-sklearn/Dockerfile
+    pylint --disable=R,C,W1203,W1202 demos/**/**.py
+
+all: install lint test
+
+
+A Dockerfile linter is called hadolint checks for bugs in a Dockerfile. A local version of the CircleCI build system allows for testing in the same environment as the SaaS offering. The minimalist approach is still present. A user only needs to remember to use the same commands: make install, make lint and make test, but the lint step is more complete and powerful with the inclusion of Dockerfile as well as Python linting.
+
+Notes about installing hadolint and circleci: If you are on OS X you can brew install hadolint. If you are on another platform follow the instructions from the hadolint GitHub repo. To install the local version of circleci on OS X or Linux you can run curl -fLSs https://circle.ci/cli | bash or follow the official instructions for local version of the CircleCI build system.
+
+https://github.com/hadolint/hadolint/
+
+https://circleci.com/docs/local-cli
+
+
+CircleCI lint workflow
+You can find Noah's code here. Note that the Makefile used in the video is the one in the class-demos directory, while he changes into the subdirectory within demos after that.
+
+https://github.com/udacity/DevOps_Microservices/tree/master/Lesson-2-Docker-format-containers/class-demos
+
+
+Using CircleCI
+Here are the steps Noah took in the above video:
+
+Added to the Makefile:
+
+validate-circleci:
+    circleci config process .circleci/config.yml
+
+run-circleci-local:
+    circleci local execute
+
+lint: # This line should already be there with regular pylint
+    hadolint path/to/Dockerfile
+
+Runs hadolint Dockerfile
+
+Uses the config.yml file within a .circleci directory
+
+In the parent directory, runs make run-circleci-local to simulate what will happen in the remote CircleCI environment
+
+Uses the CircleCI website (a related blog post is linked below) to test remotely
+
+Notes about how to run this example
+These instructions work the best on a Linux or OS X system or inside a Docker container itself. One way to dramatically simplify installation and configuration in the Cloud is to use a Cloud based development environment like AWS Cloud9. This was shown in the AWS Lambda examples in Lesson 1. This allows you to eliminate a huge portion of the problems you can run into when installing software. If you are expert at installing software on Linux, Windows or OS X, then this may not matter. If you want the easiest path to running these commands, use AWS Cloud9.
+
+Reference
+Increase reliability in data science and machine learning projects with CircleCI
+https://circleci.com/blog/increase-reliability-in-data-science-and-machine-learning-projects-with-circleci/
+
+AWS Cloud9
+https://aws.amazon.com/cloud9/
+
+Q: What does hadolint do?
+hadolint is used to lint a Dockerfile's syntax.
+
+-: Running Dockerfiles
+Using "base" images
+One of the advantages of the Docker workflow for developers is the ability to use certified containers from the "official" development teams. In this diagram a developer uses the official Python base image which is developed by the core Python developers. This is accomplished by the FROM statement which loads in a previously created container image.
+
+As the developer makes changes to the Dockerfile, they test locally, then push the changes to a private Docker Hub repo. After this, the changes can be used by a deployment process to a Cloud or by another developer.
+
+You can find Noah's code here, within the demos subdirectory. Note that he has begun filling out the Dockerfile and run_docker.sh files in the video.
+
+https://github.com/udacity/DevOps_Microservices/tree/master/Lesson-2-Docker-format-containers/class-demos
+
+Docker Cheat Sheet
+Use docker image ls to see all of your created Docker images
+docker run -it {image name} bash ran Noah's Docker image
+Here is a quick Docker cheat sheet for your reference.
+
+Noah's Dockerfile
+Below is Noah's Dockerfile for your reference:
+
+FROM python:3.7.3-stretch
+
+# Working Directory
+WORKDIR /app
+
+# Copy source code to working directory
+COPY . app.py /app/
+
+# Install packages from requirements.txt
+# hadolint ignore=DL3013
+RUN pip install --upgrade pip &&\
+    pip install --trusted-host pypi.python.org -r requirements.txt
+
+Q: What is FROM in a Dockerfile?
+FROM is a directive to load code
+
+-: Summary
+Key Terms:
+Container
+A container is a set of processes that are isolated from the rest of the operating system. They are often megabytes in size.
+
+Virtual Machine
+A virtual machine is the emulation of a physical operating system. They can be Gigabytes in size.
+
+Docker Format Container
+There are several formats for containers. An emerging form is Docker, which involves the definition of a Dockerfile.
+
+pip
+The pip tool installs Python packages.
+
+pylint
+The pylint tool checks the Python source code for syntax errors.
+
+black
+The black tool formats the text of Python source code automatically.
+
+pytest
+The pytest tool is a framework for running tests on Python source code.
+
+IPython
+The ipython interpreter is an interactive terminal for Python. It is the core of the Jupyter notebook.
+
+Makefile
+A Makefile is a file that contains a set of directives used to build software. Most Unix and Linux operating systems have built-in support for this file format.
+
+CircleCI
+A popular SaaS (Software as a Service) build systems used in DevOps workflows.
+
+Docker
+Docker is a company that creates container technology, including an execution engine, collaboration platform via DockerHub and a container format called Dockerfile.
+
+Amazon ECR
+Amazon ECR is a container registry that stores Docker format containers.
+
+Source: https://noahgift.github.io/cloud-data-analysis-at-scale/topics/key-terms
