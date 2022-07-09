@@ -227,6 +227,8 @@ all: install lint test
 
 A Dockerfile linter is called hadolint checks for bugs in a Dockerfile. A local version of the CircleCI build system allows for testing in the same environment as the SaaS offering. The minimalist approach is still present. A user only needs to remember to use the same commands: make install, make lint and make test, but the lint step is more complete and powerful with the inclusion of Dockerfile as well as Python linting.
 
+https://circleci.com/docs/local-cli
+
 Notes about installing hadolint and circleci: If you are on OS X you can brew install hadolint. If you are on another platform follow the instructions from the hadolint GitHub repo. To install the local version of circleci on OS X or Linux you can run curl -fLSs https://circle.ci/cli | bash or follow the official instructions for local version of the CircleCI build system.
 
 https://github.com/hadolint/hadolint/
