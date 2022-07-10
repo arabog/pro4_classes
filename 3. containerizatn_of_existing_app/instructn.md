@@ -74,6 +74,38 @@ logging may need to be configured
 a container may need to have CPU, Disk and Memory requiremts configured
 it may need ports exposed internal, externally and in a cluster
 
+Q: Which of the following would allow you to look at a deployed Flask app that uses port 6001 by visiting http://localhost:8080?
+
+docker run -p 8080:6001 my_app
 
 
 
+Code Example
+Data Engineering API Example by Noah: LINK
+https://github.com/udacity/DevOps_Microservices/tree/master/Lesson-3-Containerization
+
+The run_docker.py file in the video is included below:
+
+#!/usr/bin/env bash
+
+# Build image
+docker build --tag=api .
+
+# List docker images
+docker image ls
+
+# Run flask app
+docker run -p 8000:5001 api
+
+-: Lesson Summary
+Swagger
+A swagger tool is an open-source framework that simplifies the creation of API documentation.
+
+Data Engineering
+Data Engineering is the process of automating the flow of data.
+
+Ports
+A port is a network communication endpoint. An example of a port is a web service running on port 80 via the protocol HTTP.
+
+JSON
+JSON stands for JavaScript Object Notation, and it is a lightweight, human-readable data format used heavily in web services.
